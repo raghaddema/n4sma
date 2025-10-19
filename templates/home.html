@@ -1,0 +1,55 @@
+{% include 'header.html' %}
+
+<main>
+  <section class="hero">
+    <h1>عطور تفوح بالأناقة</h1>
+    <p>اكتشف مجموعة <span>نسمة</span> المميزة للعطور الفاخرة.</p>
+    <a href="#" class="cta">تسوق الآن</a>
+  </section>
+</main>
+
+{% include 'footer.html' %}
+
+<style>
+  main {
+    min-height: 100vh;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.85)
+    ), url('perfume-bg.jpg') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    padding-top: 100px;
+  }
+
+  .hero h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+    color: gold;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+  }
+
+  .hero p {
+    font-size: 1.2em;
+    color: #ddd;
+    margin-bottom: 20px;
+  }
+
+  .cta {
+    background-color: gold;
+    color: black;
+    padding: 12px 25px;
+    border-radius: 15px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  .cta:hover {
+    background-color: #fff;
+  }
+</style>
