@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إنشاء حساب | نسمة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(to bottom, #000, #222);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .register-container {
+      background: rgba(25, 25, 25, 0.8);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 20px;
+      padding: 40px;
+      width: 360px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+    }
+
+    h2 {
+      color: gold;
+      margin-bottom: 25px;
+      font-size: 1.6em;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-family: 'Cairo';
+    }
+
+    input[type="text"], input[type="email"], input[type="password"] {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .btn {
+      background-color: gold;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 95%;
+    }
+
+    .btn:hover {
+      background-color: #fff;
+      color: #000;
+    }
+
+    p {
+      margin-top: 20px;
+      color: #ccc;
+    }
+
+    a {
+      color: gold;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 15px;
+    }
+
+    li {
+      color: #ff7777;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="register-container">
+    <h2>📝 إنشاء حساب جديد</h2>
+
+    {% if messages %}
+      <ul>
+        {% for msg in messages %}
+          <li>{{ msg }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <form method="POST">
+      {% csrf_token %}
+      <input type="text" name="full_name" placeholder="الاسم الكامل" required><br>
+      <input type="email" name="email" placeholder="البريد الإلكتروني" required><br>
+      <input type="password" name="password" placeholder="كلمة المرور" required><br>
+      <input type="password" name="confirm" placeholder="تأكيد كلمة المرور" required><br>
+      <button type="submit" class="btn">إنشاء الحساب</button>
+    </form>
+
+    <p>لديك حساب؟ <a href="{% url 'login' %}">تسجيل الدخول</a></p>
+  </div>
+
+</body>
+</html>

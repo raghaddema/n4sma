@@ -53,18 +53,31 @@
       color: gold;
     }
 
-    .cart-btn {
+    .buttons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
       background-color: gold;
       color: black;
       padding: 8px 15px;
       border-radius: 10px;
       font-weight: bold;
+      text-decoration: none;
       transition: 0.3s;
     }
 
-    .cart-btn:hover {
+    .btn:hover {
       background-color: #fff;
       color: black;
+    }
+
+    .welcome {
+      color: gold;
+      margin-left: 15px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -72,6 +85,7 @@
 
 <header>
   <div class="logo">نسمة</div>
+
   <nav>
     <ul>
       <li><a href="#">الرئيسية</a></li>
@@ -80,5 +94,19 @@
       <li><a href="#">تواصل معنا</a></li>
     </ul>
   </nav>
-  <a href="#" class="cart-btn">🛍 السلة</a>
+
+  <div class="buttons">
+    {% if user.is_authenticated %}
+      <span class="welcome">👋 مرحبًا، {{ user.first_name|default:user.username }}</span>
+      <a href="{% url 'logout' %}" class="btn">🔓 تسجيل الخروج</a>
+      <a href="#" class="btn">🛍 السلة</a>
+    {% else %}
+      <a href="{% url 'register' %}" class="btn">📝 إنشاء حساب</a>
+      <a href="{% url 'login' %}" class="btn">🔐 تسجيل الدخول</a>
+      <a href="#" class="btn">🛍 السلة</a>
+    {% endif %}
+  </div>
 </header>
+
+</body>
+</html>
