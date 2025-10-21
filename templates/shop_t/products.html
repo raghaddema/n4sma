@@ -1,3 +1,4 @@
+{% load cloudinary %} 
 {% include 'header.html' %}
 
 <main class="all-products">
@@ -6,7 +7,8 @@
     {% for product in products %}
       <div class="product-card">
         {% if product.image %}
-          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+          <!-- 🟢 استخدام تاغ Cloudinary لعرض الصورة -->
+          {% cloudinary product.image format="jpg" width=300 height=220 crop="fill" alt=product.name class="product-img" %}
         {% else %}
           <img src="https://via.placeholder.com/300x200?text=No+Image" alt="No Image">
         {% endif %}
@@ -66,7 +68,7 @@
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
   }
 
-  .product-card img {
+  .product-img {
     width: 100%;
     height: 220px;
     object-fit: cover;

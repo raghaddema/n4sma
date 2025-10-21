@@ -1,18 +1,41 @@
 from django.db import models
+from cloudinary.models import CloudinaryField
 
 class Product(models.Model):
     # 🪔 الاسم والسعر
-    name = models.CharField(max_length=100, verbose_name="اسم المنتج")
-    price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="السعر")
+    name = models.CharField(
+        max_length=100,
+        verbose_name="اسم المنتج"
+    )
 
-    # 🖼️ صورة المنتج
-    image = models.ImageField(upload_to="products/", verbose_name="صورة المنتج",blank=True,null=True)
+    price = models.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+        verbose_name="السعر"
+    )
+
+    # ☁️ صورة المنتج (تُرفع مباشرة إلى Cloudinary)
+    image = CloudinaryField(
+        "صورة المنتج",
+        folder="products",     # مجلد الصور داخل Cloudinary
+        blank=True,
+        null=True
+    )
 
     # 📝 وصف المنتج
-    description = models.TextField(verbose_name="وصف المنتج",max_length=500,blank=True,null=True)
+    description = models.TextField(
+        verbose_name="وصف المنتج",
+        max_length=500,
+        blank=True,
+        null=True
+    )
 
     # 📏 حجم المنتج (بالملي)
-    size_ml = models.PositiveIntegerField(verbose_name="الحجم (مل)",default=100,help_text="اكتب الحجم بالملي، مثل 50 أو 100")
+    size_ml = models.PositiveIntegerField(
+        verbose_name="الحجم (مل)",
+        default=100,
+        help_text="اكتب الحجم بالملي، مثل 50 أو 100"
+    )
 
     class Meta:
         verbose_name = "منتج"

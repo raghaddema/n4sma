@@ -1,4 +1,7 @@
 from pathlib import Path
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # =========================
 # 📁 المسارات الأساسية
@@ -17,17 +20,21 @@ ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 # =========================
 INSTALLED_APPS = [
     # تطبيقات Django الافتراضية
-    "django.contrib.admin",          # لوحة التحكم الإدارية
-    "django.contrib.auth",           # نظام المستخدمين والصلاحيات
-    "django.contrib.contenttypes",   # أنواع المحتوى
-    "django.contrib.sessions",       # إدارة الجلسات
-    "django.contrib.messages",       # رسائل التنبيه
-    "django.contrib.staticfiles",    # الملفات الثابتة (CSS/JS)
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 
     # 🧩 تطبيقات المشروع
     "shop",        # 🏪 المتجر
     "orders",      # 🧾 الطلبات
     "accounts",    # 👤 المستخدمين
+
+    # ☁️ مكتبة Cloudinary
+    "cloudinary",
+    "cloudinary_storage",
 ]
 
 # =========================
@@ -55,7 +62,7 @@ ROOT_URLCONF = "n4sma.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],  # مجلد القوالب العام
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -96,8 +103,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # =========================
 # 🌍 اللغة والتوقيت
 # =========================
-LANGUAGE_CODE = "ar"             # اللغة العربية
-TIME_ZONE = "Asia/Riyadh"        # توقيت الرياض
+LANGUAGE_CODE = "ar"
+TIME_ZONE = "Asia/Riyadh"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -106,21 +113,13 @@ LOCALE_PATHS = [BASE_DIR / "locale"]
 # =========================
 # 🖼️ الملفات الثابتة (Static Files)
 # =========================
-# 🔸 مجلد static: يستخدم لتخزين ملفات التصميم العامة (CSS, JS, Images)
-# 🔸 STATICFILES_DIRS: يشير إلى المجلد الذي أنشأته داخل المشروع
-# 🔸 STATIC_ROOT: المجلد الذي تُجمع فيه الملفات عند تشغيل الأمر collectstatic
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [
-    BASE_DIR / "static",  # المجلد الرئيسي لملفات static في وضع التطوير
-]
-STATIC_ROOT = BASE_DIR / "staticfiles"  # يُستخدم في الإنتاج بعد تنفيذ collectstatic
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # =========================
 # 🗃️ ملفات الوسائط (Media Files)
 # =========================
-# 🔸 مجلد media: يستخدم لتخزين الملفات التي يرفعها المستخدم (صور، مستندات...).
-# 🔸 MEDIA_ROOT: هو المسار الفعلي على القرص.
-# 🔸 MEDIA_URL: هو الرابط الذي تُعرض منه هذه الملفات في المتصفح.
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
@@ -130,8 +129,24 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # =========================
+# ☁️ إعدادات Cloudinary
+# =========================
+cloudinary.config(
+    cloud_name="du8ctjwuy",
+    api_key="591112212926967",
+    api_secret="5K61ZEDyYAlq-VK17742Mehku60",
+)
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": "du8ctjwuy",
+    "API_KEY": "591112212926967",
+    "API_SECRET": "5K61ZEDyYAlq-VK17742Mehku60",
+}
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+# =========================
 # 📂 تأكيد وجود المجلدات الأساسية
 # =========================
-# (اختياري) لإنشاء المجلدات تلقائيًا إن لم تكن موجودة
 for folder in [BASE_DIR / "static", BASE_DIR / "media", BASE_DIR / "templates"]:
     folder.mkdir(exist_ok=True)
