@@ -1,34 +1,77 @@
 {% include 'header.html' %}
 
 <main>
+  <!-- 🎯 القسم العلوي (البانر) -->
   <section class="hero">
-    <h1>عطور تفوح بالأناقة</h1>
-    <p>اكتشف مجموعة <span>نسمة</span> المميزة للعطور الفاخرة.</p>
-    <a href="#" class="cta">تسوق الآن</a>
+    <div class="hero-content">
+      <h1>عطور تفوح بالأناقة</h1>
+      <p>اكتشف مجموعة <span>نسمة</span> المميزة من العطور الفاخرة، حيث الفخامة تلتقي بالإبداع.</p>
+      <a href="#featured-products" class="cta">تسوق الآن</a>
+    </div>
+  </section>
+
+  <!-- 🛍 سكشن المنتجات المختارة -->
+  <section id="featured-products" class="featured-products">
+    <div class="section-header">
+      <h2>منتجات مختارة</h2>
+      <a href="{% url 'products' %}" class="cta-black">عرض المزيد</a>
+    </div>
+
+    <div class="products-grid">
+      {% for product in featured_products %}
+        <div class="product-card">
+          {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+          {% else %}
+            <img src="https://via.placeholder.com/300x200?text=No+Image" alt="No Image">
+          {% endif %}
+          <h3>{{ product.name }}</h3>
+          <p>{{ product.description|truncatechars:60 }}</p>
+          <div class="price">{{ product.price }} ر.س</div>
+        </div>
+      {% empty %}
+        <p>لا توجد منتجات حالياً.</p>
+      {% endfor %}
+    </div>
   </section>
 </main>
 
 {% include 'footer.html' %}
 
 <style>
+  /* إعدادات عامة */
+  body {
+    margin: 0;
+    font-family: 'Cairo', sans-serif;
+    background-color: #111;
+    color: #fff;
+  }
+
+  /* البانر */
   main {
     min-height: 100vh;
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.6),
-      rgba(0, 0, 0, 0.85)
-    ), url('perfume-bg.jpg') center/cover no-repeat;
+    background:
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.85)),
+      url('/static/images/perfume-bg.jpg') center/cover no-repeat;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: white;
     padding-top: 100px;
+  }
+
+  .hero-content {
+    max-width: 700px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
   }
 
   .hero h1 {
     font-size: 3em;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     color: gold;
     text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
   }
@@ -36,20 +79,133 @@
   .hero p {
     font-size: 1.2em;
     color: #ddd;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    line-height: 1.6;
+  }
+
+  .hero span {
+    color: gold;
+    font-weight: bold;
   }
 
   .cta {
     background-color: gold;
     color: black;
-    padding: 12px 25px;
+    padding: 12px 30px;
     border-radius: 15px;
     text-decoration: none;
     font-weight: bold;
     transition: 0.3s;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
   }
 
   .cta:hover {
     background-color: #fff;
+    color: black;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+  }
+
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2em;
+    }
+    .hero p {
+      font-size: 1em;
+    }
+  }
+
+  /* سكشن المنتجات الرمادي */
+  .featured-products {
+    width: 100%;
+    padding: 80px 0;
+    background: linear-gradient(to bottom, #bbb, #888);
+  }
+
+  /* العنوان والزر في الأعلى */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto 40px auto;
+  }
+
+  .section-header h2 {
+    color: #111;
+    font-size: 2em;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+  }
+
+  /* زر عرض المزيد (أسود مربع) */
+  .cta-black {
+    background: none;
+    color: black;
+    border: 2px solid black;
+    padding: 10px 25px;
+    border-radius: 6px; /* ← مربع الزوايا */
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+
+  .cta-black:hover {
+    background-color: gold;
+    color: black;
+    border-color: gold;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+  }
+
+  /* شبكة المنتجات */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    width: 90%;
+    margin: auto;
+    max-width: 1200px;
+  }
+
+  /* مربعات زجاجية رمادية */
+  .product-card {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    text-align: center;
+    padding: 20px;
+    transition: 0.3s;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+
+  .product-card h3 {
+    color: #222;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+  }
+
+  .product-card p {
+    color: #333;
+    font-size: 0.9em;
+    height: 50px;
+    overflow: hidden;
+  }
+
+  .product-card .price {
+    color: gold;
+    font-weight: bold;
+    margin: 10px 0;
   }
 </style>

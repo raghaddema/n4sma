@@ -1,0 +1,94 @@
+{% include 'header.html' %}
+
+<main class="all-products">
+  <h1>جميع المنتجات</h1>
+  <div class="products-grid">
+    {% for product in products %}
+      <div class="product-card">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+          <img src="https://via.placeholder.com/300x200?text=No+Image" alt="No Image">
+        {% endif %}
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description|truncatechars:80 }}</p>
+        <div class="price">{{ product.price }} ر.س</div>
+      </div>
+    {% empty %}
+      <p>لا توجد منتجات حالياً.</p>
+    {% endfor %}
+  </div>
+</main>
+
+{% include 'footer.html' %}
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Cairo', sans-serif;
+    background: linear-gradient(to bottom, #ccc, #999);
+    color: #111;
+  }
+
+  main.all-products {
+    padding: 100px 0;
+    text-align: center;
+  }
+
+  main.all-products h1 {
+    color: #111;
+    font-size: 2.5em;
+    margin-bottom: 40px;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    width: 90%;
+    margin: auto;
+    max-width: 1200px;
+  }
+
+  .product-card {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    text-align: center;
+    padding: 20px;
+    transition: 0.3s;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+
+  .product-card h3 {
+    color: #222;
+    margin-bottom: 10px;
+  }
+
+  .product-card p {
+    color: #333;
+    font-size: 0.9em;
+    height: 50px;
+    overflow: hidden;
+  }
+
+  .product-card .price {
+    color: gold;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+</style>
