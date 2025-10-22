@@ -1,0 +1,184 @@
+{% include 'header.html' %}
+
+<main class="cart-page">
+  <h2>🛍 سلة التسوق</h2>
+
+  {% if cart_items %}
+    <table class="cart-table">
+      <thead>
+        <tr>
+          <th>المنتج</th>
+          <th>الكمية</th>
+          <th>السعر الإجمالي</th>
+          <th>إجراءات</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart_items %}
+          <tr>
+            <td>{{ item.product.name }}</td>
+            <td>
+              <div class="qty-controls">
+                <a href="{% url 'decrease_quantity' item.id %}" class="qty-btn">➖</a>
+                <span class="qty">{{ item.quantity }}</span>
+                <a href="{% url 'increase_quantity' item.id %}" class="qty-btn">➕</a>
+              </div>
+            </td>
+            <td>{{ item.total_price|floatformat:2 }} ر.س</td>
+            <td>
+              <a href="{% url 'remove_from_cart' item.id %}" class="remove-btn">❌</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="total-box">
+      <h3>الإجمالي الكلي: <span>{{ total|floatformat:2 }} ر.س</span></h3>
+      <a href="#" class="checkout-btn">إتمام الشراء 💳</a>
+    </div>
+  {% else %}
+    <p class="empty">السلة فارغة حالياً 🛒</p>
+  {% endif %}
+</main>
+
+{% include 'footer.html' %}
+
+<style>
+  body {
+    font-family: 'Cairo', sans-serif;
+    margin: 0;
+    background: linear-gradient(to bottom, #999, #666);
+    color: #111;
+  }
+
+  .cart-page {
+    padding: 120px 50px;
+    text-align: center;
+    min-height: 100vh;
+  }
+
+  .cart-page h2 {
+    font-size: 2.5em;
+    color: gold;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    margin-bottom: 40px;
+  }
+
+  .cart-table {
+    width: 85%;
+    margin: 0 auto 40px auto;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .cart-table th, .cart-table td {
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .cart-table th {
+    background: rgba(0, 0, 0, 0.6);
+    color: gold;
+    font-size: 1.1em;
+  }
+
+  .qty-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .qty-btn {
+    background: none;
+    border: 2px solid black;
+    padding: 4px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  .qty-btn:hover {
+    background: gold;
+    color: black;
+    border-color: gold;
+  }
+
+  .qty {
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+
+  .remove-btn {
+    background: none;
+    border: none;
+    color: red;
+    font-size: 1.4em;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+
+  .remove-btn:hover {
+    color: darkred;
+    transform: scale(1.1);
+  }
+
+  .total-box {
+    background: rgba(0, 0, 0, 0.4);
+    color: gold;
+    padding: 20px 30px;
+    border-radius: 15px;
+    display: inline-block;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+  }
+
+  .total-box h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.5em;
+  }
+
+  .total-box span {
+    color: white;
+  }
+
+  .checkout-btn {
+    background: gold;
+    color: black;
+    padding: 12px 35px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  .checkout-btn:hover {
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+  }
+
+  .empty {
+    font-size: 1.3em;
+    color: #222;
+    margin-top: 50px;
+  }
+
+  @media (max-width: 768px) {
+    .cart-table {
+      width: 95%;
+      font-size: 0.9em;
+    }
+
+    .checkout-btn {
+      display: block;
+      width: fit-content;
+      margin: 20px auto;
+    }
+  }
+</style>

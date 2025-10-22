@@ -35,13 +35,19 @@
     }
 
     /* ✨ الشعار */
-    .logo {
+    .logo a {
       font-size: 1.8em;
       font-weight: bold;
       color: gold;
+      text-decoration: none;
       letter-spacing: 1px;
       text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
-      flex-shrink: 0;
+      transition: 0.3s;
+    }
+
+    .logo a:hover {
+      color: #fff;
+      text-shadow: 0 0 10px gold;
     }
 
     /* 🔹 روابط التنقل */
@@ -72,7 +78,7 @@
       color: #fff;
       padding: 10px 24px;
       border: none;
-      border-radius: 15px;
+      border-radius: 10px;
       font-weight: bold;
       text-decoration: none;
       transition: all 0.3s ease-in-out;
@@ -80,6 +86,7 @@
       cursor: pointer;
       display: inline-block;
       white-space: nowrap;
+      border: 1px solid rgba(255, 215, 0, 0.5);
     }
 
     .btn:hover {
@@ -97,12 +104,25 @@
       flex-shrink: 0;
     }
 
+    /* 🟠 ترحيب المستخدم */
     .welcome {
-      color: rgb(255, 255, 255);
+      color: gold;
       font-weight: bold;
       font-size: 1em;
       white-space: nowrap;
       margin-left: 10px;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+    }
+
+    /* 🛍 عدد العناصر في السلة */
+    .cart-count {
+      background-color: gold;
+      color: black;
+      font-weight: bold;
+      padding: 3px 8px;
+      border-radius: 50%;
+      font-size: 0.9em;
+      margin-right: 5px;
     }
 
     /* 📱 التنسيق في الجوال */
@@ -127,45 +147,53 @@
       }
 
       .btn {
-        padding: 10px 20px;
-        font-size: 1em;
+        padding: 8px 20px;
+        font-size: 0.95em;
       }
 
-      .logo {
+      .logo a {
         font-size: 1.6em;
         margin-bottom: 5px;
       }
     }
-
   </style>
 </head>
 
 <body>
+  <header>
+    <!-- ✨ شعار الموقع -->
+    <div class="logo">
+      <a href="{% url 'home' %}">نسمة</a>
+    </div>
 
-<header>
-  <div class="logo">نسمة</div>
+    <!-- 🔗 روابط التنقل -->
+    <nav>
+      <ul>
+        <li><a href="{% url 'home' %}">الرئيسية</a></li>
+        <li><a href="{% url 'products' %}">منتجاتنا</a></li>
+        <li><a href="#">من نحن</a></li>
+        <li><a href="#">تواصل معنا</a></li>
+      </ul>
+    </nav>
 
-  <nav>
-    <ul>
-      <li><a href="#">الرئيسية</a></li>
-      <li><a href="#">منتجاتنا</a></li>
-      <li><a href="#">من نحن</a></li>
-      <li><a href="#">تواصل معنا</a></li>
-    </ul>
-  </nav>
+    <!-- 🧭 الأزرار -->
+    <div class="buttons">
+      {% if user.is_authenticated %}
+        <span class="welcome">👋 مرحبًا، {{ user.first_name|default:user.username }}</span>
+        <a href="{% url 'logout' %}" class="btn">تسجيل الخروج</a>
+      {% else %}
+        <a href="{% url 'register' %}" class="btn">إنشاء حساب</a>
+        <a href="{% url 'login' %}" class="btn">تسجيل الدخول</a>
+      {% endif %}
 
-  <div class="buttons">
-    {% if user.is_authenticated %}
-      <span class="welcome">👋 مرحبًا، {{ user.first_name|default:user.username }}</span>
-      <a href="{% url 'logout' %}" class="btn">تسجيل الخروج</a>
-      <a href="#" class="btn">🛍 السلة</a>
-    {% else %}
-      <a href="{% url 'register' %}" class="btn">إنشاء حساب</a>
-      <a href="{% url 'login' %}" class="btn">تسجيل الدخول</a>
-      <a href="#" class="btn">🛍 السلة</a>
-    {% endif %}
-  </div>
-</header>
-
+      <!-- 🛒 زر السلة -->
+      <a href="{% url 'cart' %}" class="btn">
+        🛍 السلة
+        {% if request.session.cart_count %}
+          <span class="cart-count">{{ request.session.cart_count }}</span>
+        {% endif %}
+      </a>
+    </div>
+  </header>
 </body>
 </html>

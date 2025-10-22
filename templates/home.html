@@ -3,9 +3,8 @@
 {% include 'header.html' %}
 
 <main>
-  <!-- 🎯 القسم العلوي (البانر) -->
+  <!-- 🎯 القسم العلوي (البانر بالفيديو) -->
   <section class="hero">
-    <!-- 🎥 خلفية الفيديو -->
     <video autoplay muted loop playsinline class="hero-video">
       <source src="{% static 'videos/257927_tiny.mp4' %}" type="video/mp4">
       متصفحك لا يدعم تشغيل الفيديو.
@@ -18,7 +17,7 @@
     </div>
   </section>
 
-  <!-- 🛍 سكشن المنتجات المختارة -->
+  <!-- 🛍 المنتجات المختارة -->
   <section id="featured-products" class="featured-products">
     <div class="section-header">
       <h2>منتجات مختارة</h2>
@@ -31,11 +30,16 @@
           {% if product.image %}
             {% cloudinary product.image format="jpg" width=300 height=220 crop="fill" alt=product.name class="product-img" %}
           {% else %}
-            <img src="https://via.placeholder.com/300x200?text=No+Image" alt="No Image">
+            <img src="https://via.placeholder.com/300x200?text=No+Image" alt="No Image" class="product-img">
           {% endif %}
           <h3>{{ product.name }}</h3>
           <p>{{ product.description|truncatechars:60 }}</p>
           <div class="price">{{ product.price }} ر.س</div>
+
+          <!-- 🛒 زر الإضافة إلى السلة -->
+          <a href="{% url 'add_to_cart' product.id %}" class="add-btn" onclick="showToast('{{ product.name }}')">
+            🛒 أضف إلى السلة
+          </a>
         </div>
       {% empty %}
         <p>لا توجد منتجات حالياً.</p>
@@ -44,14 +48,19 @@
   </section>
 </main>
 
+<!-- ✅ إشعار بسيط عند الإضافة للسلة -->
+<div id="toast" class="toast">تمت إضافة المنتج إلى السلة 🛍️</div>
+
 {% include 'footer.html' %}
 
 <style>
+  /* 🎨 الإعدادات العامة */
   body {
     margin: 0;
     font-family: 'Cairo', sans-serif;
     background-color: #111;
     color: #fff;
+    scroll-behavior: smooth;
   }
 
   /* 🌟 البانر */
@@ -74,14 +83,15 @@
     object-fit: cover;
     z-index: 0;
     filter: brightness(60%);
+    transition: transform 10s ease-in-out;
   }
 
   .hero-content {
     position: relative;
     z-index: 1;
     max-width: 700px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.45);
+    padding: 25px;
+    background: rgba(0, 0, 0, 0.55);
     border-radius: 20px;
     text-align: center;
     box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
@@ -96,7 +106,7 @@
 
   .hero p {
     font-size: 1.2em;
-    color: #ddd;
+    color: #eee;
     margin-bottom: 25px;
     line-height: 1.6;
   }
@@ -123,20 +133,11 @@
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
   }
 
-  @media (max-width: 768px) {
-    .hero h1 {
-      font-size: 2em;
-    }
-    .hero p {
-      font-size: 1em;
-    }
-  }
-
   /* 🛍 سكشن المنتجات */
   .featured-products {
     width: 100%;
     padding: 80px 0;
-    background: linear-gradient(to bottom, #454444, #454444);
+    background: linear-gradient(to bottom, #555, #333);
   }
 
   .section-header {
@@ -149,15 +150,15 @@
   }
 
   .section-header h2 {
-    color: #ffffff;
+    color: gold;
     font-size: 2em;
     text-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
   }
 
   .cta-black {
     background: none;
-    color: black;
-    border: 2px solid black;
+    color: gold;
+    border: 2px solid gold;
     padding: 10px 25px;
     border-radius: 6px;
     font-weight: bold;
@@ -168,7 +169,6 @@
   .cta-black:hover {
     background-color: gold;
     color: black;
-    border-color: gold;
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
   }
 
@@ -182,9 +182,9 @@
   }
 
   .product-card {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 15px;
     text-align: center;
     padding: 20px;
@@ -205,13 +205,13 @@
   }
 
   .product-card h3 {
-    color: #222;
+    color: #fff;
     margin-bottom: 10px;
     font-size: 1.2em;
   }
 
   .product-card p {
-    color: #333;
+    color: #ccc;
     font-size: 0.9em;
     height: 50px;
     overflow: hidden;
@@ -222,4 +222,57 @@
     font-weight: bold;
     margin: 10px 0;
   }
+
+  /* 🛒 زر الإضافة للسلة */
+  .add-btn {
+    display: inline-block;
+    background: none;
+    color: gold;
+    border: 2px solid gold;
+    padding: 10px 25px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+
+  .add-btn:hover {
+    background-color: gold;
+    color: black;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+    transform: scale(1.05);
+  }
+
+  /* 🧁 إشعار السلة */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: gold;
+    color: black;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.5s ease;
+    z-index: 9999;
+  }
+
+  .toast.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-10px);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+  }
 </style>
+
+<script>
+  function showToast(productName) {
+    const toast = document.getElementById("toast");
+    toast.textContent = `✅ تمت إضافة "${productName}" إلى السلة!`;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
+  }
+</script>

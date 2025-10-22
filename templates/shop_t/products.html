@@ -3,18 +3,23 @@
 
 <main class="all-products">
   <h1>جميع المنتجات</h1>
+
   <div class="products-grid">
     {% for product in products %}
       <div class="product-card">
         {% if product.image %}
-          <!-- 🟢 استخدام تاغ Cloudinary لعرض الصورة -->
+          <!-- 🟢 عرض الصورة من Cloudinary -->
           {% cloudinary product.image format="jpg" width=300 height=220 crop="fill" alt=product.name class="product-img" %}
         {% else %}
-          <img src="https://via.placeholder.com/300x200?text=No+Image" alt="No Image">
+          <img src="https://via.placeholder.com/300x200?text=No+Image" alt="No Image" class="product-img">
         {% endif %}
+
         <h3>{{ product.name }}</h3>
         <p>{{ product.description|truncatechars:80 }}</p>
         <div class="price">{{ product.price }} ر.س</div>
+
+        <!-- 🛒 زر الإضافة إلى السلة -->
+        <a href="{% url 'add_to_cart' product.id %}" class="add-btn">🛒 أضف إلى السلة</a>
       </div>
     {% empty %}
       <p>لا توجد منتجات حالياً.</p>
@@ -25,10 +30,11 @@
 {% include 'footer.html' %}
 
 <style>
+  /* 🎨 تنسيقات عامة */
   body {
     margin: 0;
     font-family: 'Cairo', sans-serif;
-    background: linear-gradient(to bottom, #ccc, #999);
+    background: linear-gradient(to bottom, #555, #333);
     color: #111;
   }
 
@@ -38,12 +44,13 @@
   }
 
   main.all-products h1 {
-    color: #111;
+    color: #ffffff;
     font-size: 2.5em;
     margin-bottom: 40px;
     text-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
   }
 
+  /* 🧩 الشبكة */
   .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -53,6 +60,7 @@
     max-width: 1200px;
   }
 
+  /* 🧊 البطاقات */
   .product-card {
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
@@ -92,5 +100,25 @@
     color: gold;
     font-weight: bold;
     margin: 10px 0;
+  }
+
+  /* 🛒 زر الإضافة للسلة */
+  .add-btn {
+    display: inline-block;
+    background: none;
+    color: black;
+    border: 2px solid black;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  .add-btn:hover {
+    background-color: gold;
+    color: black;
+    border-color: gold;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
   }
 </style>
