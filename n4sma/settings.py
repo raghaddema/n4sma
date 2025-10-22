@@ -1,38 +1,36 @@
 from pathlib import Path
+import os
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+from dotenv import load_dotenv
 
 # =========================
-# 📁 المسارات الأساسية
+# 📁 تحميل ملف البيئة (.env)
 # =========================
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
 # =========================
 # 🔑 مفاتيح الأمان
 # =========================
-SECRET_KEY = "django-insecure--+w-q&r&ab(9*nw)3*_9zr97+go(&4tykcx3f0-4=yf+b2+fwd"
-DEBUG = True
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret")
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 # =========================
 # ⚙️ التطبيقات (Apps)
 # =========================
 INSTALLED_APPS = [
-    # تطبيقات Django الافتراضية
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
-    # 🧩 تطبيقات المشروع
-    "shop",        # 🏪 المتجر
-    "orders",      # 🧾 الطلبات
-    "accounts",    # 👤 المستخدمين
-
-    # ☁️ مكتبة Cloudinary
+    "shop",
+    "orders",
+    "accounts",
     "cloudinary",
     "cloudinary_storage",
 ]
@@ -43,7 +41,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.locale.LocaleMiddleware",  # لدعم اللغة العربية
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -83,12 +81,26 @@ WSGI_APPLICATION = "n4sma.wsgi.application"
 # =========================
 # 🗄️ قاعدة البيانات
 # =========================
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+ENV = os.getenv("DJANGO_ENV", "development")
+
+if ENV == "production":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("DB_NAME"),
+            "USER": os.getenv("DB_USER"),
+            "PASSWORD": os.getenv("DB_PASSWORD"),
+            "HOST": os.getenv("DB_HOST"),
+            "PORT": os.getenv("DB_PORT"),
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 # =========================
 # 🔐 تحقق كلمات المرور
@@ -111,14 +123,14 @@ USE_TZ = True
 LOCALE_PATHS = [BASE_DIR / "locale"]
 
 # =========================
-# 🖼️ الملفات الثابتة (Static Files)
+# 🖼️ الملفات الثابتة
 # =========================
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # =========================
-# 🗃️ ملفات الوسائط (Media Files)
+# 🗃️ ملفات الوسائط
 # =========================
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -132,15 +144,15 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # ☁️ إعدادات Cloudinary
 # =========================
 cloudinary.config(
-    cloud_name="du8ctjwuy",
-    api_key="591112212926967",
-    api_secret="5K61ZEDyYAlq-VK17742Mehku60",
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
 )
 
 CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": "du8ctjwuy",
-    "API_KEY": "591112212926967",
-    "API_SECRET": "5K61ZEDyYAlq-VK17742Mehku60",
+    "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
 }
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
