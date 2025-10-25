@@ -16,7 +16,7 @@ load_dotenv(BASE_DIR / ".env")
 # =========================
 SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret")
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost,n4sma.onrender.com").split(",")
 
 # =========================
 # ⚙️ التطبيقات (Apps)
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 # =========================
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # ⚠️ ضروري لتقديم ملفات static
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -123,17 +124,25 @@ USE_TZ = True
 LOCALE_PATHS = [BASE_DIR / "locale"]
 
 # =========================
-# 🖼️ الملفات الثابتة
+# 🖼️ الملفات الثابتة (Static)
 # =========================
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+# ⚙️ WhiteNoise لتقديم ملفات static في Render
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 # =========================
-# 🗃️ ملفات الوسائط
+# 🗃️ ملفات الوسائط (Media)
 # =========================
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# =========================
+# 🔐 أصول الأمان
+# =========================
+CSRF_TRUSTED_ORIGINS = ["https://n4sma.onrender.com"]
 
 # =========================
 # ⚙️ الإعداد الافتراضي للحقل التلقائي

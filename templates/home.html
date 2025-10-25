@@ -30,7 +30,7 @@
           {% if product.image %}
             {% cloudinary product.image format="jpg" width=300 height=220 crop="fill" alt=product.name class="product-img" %}
           {% else %}
-            <img src="https://via.placeholder.com/300x200?text=No+Image" alt="No Image" class="product-img">
+            <img src="{% static 'images/no-image.png' %}" alt="No Image" class="product-img">
           {% endif %}
           <h3>{{ product.name }}</h3>
           <p>{{ product.description|truncatechars:60 }}</p>
